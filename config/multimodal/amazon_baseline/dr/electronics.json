@@ -1,0 +1,110 @@
+{
+    "data": {
+        "dataset": "lazada",
+        "language": "indonesian",
+        "cat": "eletronic_mobile_prd_y18_19",
+        "data_dir": "/home/junhao.jh/dataset/lazada/eletronic_mobile_prd_y18_19/set2",
+        "save_dir": "/home/junhao.jh/dataset/lazada/eletronic_mobile_prd_y18_19/set2/save",
+        "reprocess": false
+    },
+    "embedding": {
+        "pretrained_file": "/home/junhao.jh/bin/fasttext/cc.id.300.vec",
+        "product_token": {
+            "dimension": 300,
+            "type": "pretrain",
+            "pretrained_file": "/home/junhao.jh/bin/fasttext/cc.id.300.vec",
+            "dropout": 0.5,
+            "init_type": "uniform",
+            "filter_low_freq": 5
+        },
+        "review_token": {
+            "dimension": 300,
+            "type": "pretrain",
+            "pretrained_file": "/home/junhao.jh/bin/fasttext/cc.id.300.vec",
+            "dropout": 0.5,
+            "init_type": "uniform",
+            "filter_low_freq": 5
+        }
+    },
+    "text_encoder": {
+        "type": "LSTM",
+        "max_length": 128,
+        "RNN": {
+            "bidirectional": true,
+            "num_layers": 1,
+            "type": "LSTM",
+            "hidden_dimension": 64,
+            "dropout": 0.1
+        }
+    },
+    "model": {
+        "modeling": "DRNet",
+        "linear_transformation": {
+            "text_dimension": 300,
+            "node_dimension": 300,
+            "dropout": 0.5
+        },
+        "classifier": {
+            "num_layer": 1,
+            "dropout": 0.5
+        }
+    },
+    "net": "prnet",
+    "train": {
+        "task": "ranking",
+        "random_seed": 2020,
+        "optimizer": {
+            "type": "Adam",
+            "lr": 0.0001
+        },
+        "scheduler": {
+            "type": "ReduceLROnPlateau",
+            "mode": "max",
+            "factor": 0.5,
+            "patience": 4,
+            "verbose": true
+        },
+        "loss": {
+            "type": "PointCrossEntropyLoss",
+            "threshold": 0
+        },
+        "batch_size": 2,
+        "start_epoch": 0,
+        "end_epoch": 10,
+        "validate_interval": "",
+        "save_interval": 1,
+        "validate_at_epoch_end": true,
+        "label_type": "sigmoid",
+        "mode": "pair",
+        "num_dup": 1,
+        "num_neg": 7,
+        "data_mode": "pair",
+        "resample": true,
+        "weighted_sampling": true,
+        "relation_building_interval": 1,
+        "shuffle": true,
+        "allocate_num": 16,
+        "main_metric": 0,
+        "train_from_scratch": true,
+        "early_stopping": 8,
+        "checkpoint": {
+            "dir": "/home/junhao.jh/checkpoint/lazada/eletronic_mobile_prd_y18_19/php_all_rvw/",
+            "load_from": ""
+        }
+    },
+    "device_setting": {
+        "device": "cuda",
+        "visible_device_list": "0",
+        "num_workers": 2
+    },
+    "test": {
+        "best_checkpoint": "best_r2_PRHNet",
+        "batch_size": 2,
+        "allocate_num": 16
+    },
+    "log": {
+        "level": "info",
+        "debug": false,
+        "filename": "/home/junhao.jh/checkpoint/lazada/eletronic_mobile_prd_y18_19/php_all_rvw/rhp.log"
+    }
+}

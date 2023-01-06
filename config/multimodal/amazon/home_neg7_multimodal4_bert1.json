@@ -1,0 +1,173 @@
+{
+    "log": {
+        "level": "info",
+        "debug": false,
+        "filename": "/home/wh.347426/checkpoint/amazon18/home_and_kitchen/all_multimodal_4/multimodal_rhp.log"
+    },
+    "data": {
+        "dataset": "amazon18",
+        "language": "en",
+        "read_type": "all",
+        "cat": "home_and_kitchen",
+        "data_dir": "/home/wh.347426/dataset/amazon18/home_and_kitchen/set2",
+        "feat_dir": "/home/wh.347426/dataset/amazon18/home_and_kitchen/set1/features",
+        "save_dir": "/home/wh.347426/dataset/amazon18/home_and_kitchen/set2/all_rvw_new_bert",
+        "reprocess": false
+    },
+    "preprocess": {
+        "prd_filter_low_freq": 5,
+        "rvw_filter_low_freq": 5
+    },
+    "model": {
+        "modeling": "CommonSpaceMultimodalLayernormBertRHP3"
+    },
+    "input_setting": {
+        "use_img": true,
+        "txt_max_length": 128,
+        "img_max_length": 128,
+        "txt_min_length": 1,
+        "img_min_length": 16,
+        "max_roi_per_img": 32
+    },
+    "prd_txt_encoder": {
+        "embedding": {
+            "pretrained_file": "/home/wh.347426/bin/glove/glove.6B.300d.txt",
+            "embed_dim": 768,
+            "init_type": "uniform",
+            "embed_type": "pretrain",
+            "dropout": 0.5
+        },
+        "encoder": {
+            "kernel_size": [1, 3, 5],
+            "hidden_dimension": 128
+        }
+    },
+    "rvw_txt_encoder": {
+        "embedding": {
+            "pretrained_file": "/home/wh.347426/bin/glove/glove.6B.300d.txt",
+            "embed_dim": 768,
+            "init_type": "uniform",
+            "embed_type": "pretrain",
+            "dropout": 0.5
+        },
+        "encoder": {
+            "kernel_size": [1, 3, 5],
+            "hidden_dimension": 128
+        }
+    },
+    "common_space": {
+        "hidden_dim": 64
+    },
+    "prd_img_encoder": {
+        "encoder_layers": 3,
+        "input_dim": 2048,
+        "encoder_embed_dim": 128,
+        "dropout": 0.5,
+        "relu_dropout": 0.3,
+        "encoder_attention_heads": 4,
+        "attention_dropout": 0.3,
+        "encoder_ffn_embed_dim": 512
+    },
+    "rvw_img_encoder": {
+        "encoder_layers": 3,
+        "input_dim": 2048,
+        "encoder_embed_dim": 128,
+        "dropout": 0.5,
+        "relu_dropout": 0.3,
+        "encoder_attention_heads": 4,
+        "attention_dropout": 0.3,
+        "encoder_ffn_embed_dim": 512
+    },
+    "cross_match": {
+        "do_normalize": true
+    },
+    "cross_modal_match": {
+        "hidden_dim": 128,
+        "do_normalize": true
+    },
+    "coherent_encoder": {
+        "hidden_dim": 64,
+        "nlayer": 2
+    },
+    "cpc": {
+        "alpha": 0.1
+    },
+    "pooling": {
+        "txt_convs_num": 2,
+        "txt_filters_num": 4,
+        "txt_ns": 16,
+        "img_convs_num": 4,
+        "img_filters_num": 8,
+        "img_ns": 8,
+        "img2txt_convs_num": 2,
+        "img2txt_filters_num": 4,
+        "img2txt_ns": 8,
+        "txt2img_convs_num": 2,
+        "txt2img_filters_num": 4,
+        "txt2img_ns": 8
+    },
+    "train": {
+        "task": "ranking",
+        "random_seed": 2020,
+        "optimizer": {
+            "type": "Adam",
+            "lr": 0.00002
+        },
+        "scheduler": {
+            "type": "ReduceLROnPlateau",
+            "mode": "max",
+            "factor": 0.5,
+            "patience": 4,
+            "verbose": true
+        },
+        "loss": {
+            "type": "AdaptiveRankHingeLoss",
+            "num_neg": 7
+        },
+        "batch_size": 2,
+        "start_epoch": 0,
+        "end_epoch": 10,
+        "validate_interval": "",
+        "save_interval": 1,
+        "validate_at_epoch_end": true,
+        "label_type": "sigmoid",
+        "mode": "pair",
+        "num_dup": 1,
+        "num_neg": 7,
+        "data_mode": "pair",
+        "resample": false,
+        "weighted_sampling": true,
+        "relation_building_interval": 1,
+        "shuffle": true,
+        "allocate_num": 16,
+        "main_metric": 0,
+        "train_from_scratch": true,
+        "early_stopping": 8,
+        "relation_checkpoint": "/home/wh.347426/dataset/amazon18/home_and_kitchen/set2/all_rvw_new/pair_dup1_neg7_int1.train.rel",
+	"checkpoint": {
+            "dir": "/home/wh.347426/checkpoint/amazon18/home_and_kitchen/all_multimodal_4/save_bert1/",
+            "load_from": ""
+        }
+    },
+    "device_setting": {
+        "device": "cuda",
+        "visible_device_list": "0",
+        "num_workers": 2
+    },
+    "eval": {
+        "num_dup": 1,
+        "num_neg": 5,
+        "max_pos_samples": 3,
+        "resample": false,
+        "weighted_sampling": true,
+        "relation_building_interval": 0,
+        "allocate_num": 16,
+        "shuffle": true
+    },
+    "test": {
+        "best_checkpoint": "best_multimodal_PRHNet",
+        "batch_size": 2,
+        "allocate_num": 16,
+        "threshold": 1
+    }
+}
