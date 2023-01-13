@@ -39,8 +39,8 @@ python setup.py install
 ```
 
 ## Data Processing
-
-For processing text and image data, please read the details in [here](scripts/README.md).
+You can download the data from this [Google Drive](https://drive.google.com/file/d/1XMaospdOeEoXKVuH05YyH038log0lgVx/view?usp=sharing)
+To process text and image data, please read the details [here](scripts/README.md).
 
 
 ## Run Code
